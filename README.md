@@ -10,7 +10,7 @@ This Go application implements middleware for rate limiting using the Token Buck
 1. **Clone the repository:**
 
    ```bash
-   git clone {repo-name}
+   git clone https://github.com/dev-pramodThapa/go-rate-limiter.git
    cd go-rate-limiter
    ```
 
