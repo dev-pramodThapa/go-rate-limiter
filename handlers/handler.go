@@ -49,8 +49,6 @@ func UpdateRateLimitConfigHandler(w http.ResponseWriter, r *http.Request) {
 	// Reset the token bucket for a particular ID and user type
 	config.RateLimiter.ResetBucket(req.ID, req.UserType)
 
-	fmt.Println(config.UserConfig)
-
 	w.WriteHeader(http.StatusOK)
 	w.Write([]byte("Rate limit configuration updated successfully"))
 }
