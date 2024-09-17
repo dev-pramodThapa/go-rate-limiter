@@ -48,8 +48,8 @@ This Go application implements middleware for rate limiting using the Token Buck
 To run the test follow the steps:
 
 ```bash
-	cd tests
+cd tests
 ```
 ```bash
-   	go test ./
+go test ./
 ```

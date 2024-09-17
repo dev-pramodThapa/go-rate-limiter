@@ -47,7 +47,7 @@ func RateLimitMiddleware(next http.Handler) http.Handler {
 		// Update metrics for total requests count
 		conf.Metrics.IncreaseRequestsCount(fmt.Sprintf("%s:%s", segments[1], id))
 
-		if !bucket.AllowRequest() {
+		if !bucket.IsRequestAllowed() {
 			// Rate limit exceeded
 			conf.Metrics.IncreaseThrottledRequest(segments[1] + ":" + id)
 			http.Error(w, "Rate limit exceeded", http.StatusTooManyRequests)

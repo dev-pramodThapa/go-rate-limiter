@@ -2,6 +2,7 @@ package limiter
 
 import (
 	"go-rate-limiter/utils"
+	"sync"
 	"time"
 )
 
@@ -10,6 +11,7 @@ type TokenBucket struct {
 	maxTokens  int
 	lastRefill time.Time
 	refillRate time.Duration
+	mu         sync.Mutex
 }
 
 // NewTokenBucket creates a new TokenBucket with specified maxTokens and refillRate.
@@ -22,23 +24,32 @@ func NewTokenBucket(maxTokens int, refillRate time.Duration) *TokenBucket {
 	}
 }
 
-// AllowRequest checks if a request is allowed and updates the token bucket.
-func (tb *TokenBucket) AllowRequest() bool {
+// IsRequestAllowed checks if a request is allowed and updates the token bucket.
+func (tb *TokenBucket) IsRequestAllowed() bool {
+	tb.mu.Lock()
+	defer tb.mu.Unlock()
+	
+	tb.refillTokens()
+
+	// Check if there are tokens available and decrement if so
+	if tb.tokens > 0 {
+		tb.tokens--
+
+		return true
+	}
+
+	return false
+}
+
+// refillTokens updates the number of tokens in the bucket based on the elapsed time.
+func (tb *TokenBucket) refillTokens() {
 	now := time.Now()
 	elapsed := now.Sub(tb.lastRefill)
 
 	// Calculate the number of tokens to add based on elapsed time
 	newTokens := int(elapsed / tb.refillRate)
-	tb.tokens = utils.Min(tb.tokens + newTokens, tb.maxTokens)
+	tb.tokens = utils.Min(tb.tokens+newTokens, tb.maxTokens)
 	tb.lastRefill = now
-
-	// Check if there are tokens available and decrement if so
-	if tb.tokens > 0 {
-		tb.tokens--
-		return true
-	}
-
-	return false
 }
 
 // ResetBucket resets the token bucket for a given ID and bucket type with updated settings.
