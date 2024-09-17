@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"encoding/json"
-	"fmt"
 	"go-rate-limiter/limiter"
 	"net/http"
 	"time"

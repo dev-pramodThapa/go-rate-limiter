@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"go-rate-limiter/limiter"
 	"go-rate-limiter/utils"
 	"net/http"
@@ -44,7 +45,7 @@ func RateLimitMiddleware(next http.Handler) http.Handler {
 		bucket := conf.RateLimiter.GetBucket(id, endpointType, endpointConfig.MaxTokens, endpointConfig.RefillRate)
 
 		// Update metrics for total requests count
-		conf.Metrics.IncreaseRequestsCount(segments[1] + ":" + id)
+		conf.Metrics.IncreaseRequestsCount(fmt.Sprintf("%s:%s", segments[1], id))
 
 		if !bucket.AllowRequest() {
 			// Rate limit exceeded
