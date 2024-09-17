@@ -11,6 +11,8 @@ This Go application implements middleware for rate limiting using the Token Buck
 
    ```bash
    git clone https://github.com/dev-pramodThapa/go-rate-limiter.git
+   ```
+   ```bash
    cd go-rate-limiter
    ```
 
@@ -32,7 +34,8 @@ This Go application implements middleware for rate limiting using the Token Buck
    - `GET /public/info`
    - `GET /metrics`
    - `POST /update-rate-limit`
-     - Example request body:
+
+     - Sample request body:
      ```json
      "user_type": "admin",
      "id": "1",
@@ -46,5 +49,7 @@ To run the test follow the steps:
 
 ```bash
 	cd tests
+```
+```bash
    	go test ./
 ```
